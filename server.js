@@ -5,6 +5,25 @@ var path = require('path');
 var app = express();
 app.use(morgan('combined'));
 
+var articleOne = {
+  title:   'Article One | Malarvizhi' ,
+  heading: 'Article One' ,
+  date: '   February 23, 2018' ,
+  content: `
+              <p>
+                 This is the content of my first article. This is the content of my first article.This is the content of my first article.This is the content of my first article.This is the content of my first article.
+             </p>
+             
+              <p>
+                 This is the content of my first article. This is the content of my first article.This is the content of my first article.This is the content of my first article.This is the content of my first article.
+             </p>
+             
+              <p>
+                 This is the content of my first article. This is the content of my first article.This is the content of my first article.This is the content of my first article.This is the content of my first article.
+             </p>`
+   };
+var htmltemplate = `
+
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'index.html'));
 });
