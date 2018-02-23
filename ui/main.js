@@ -19,5 +19,5 @@ button.onclick = function() {
     };
  // Make the request
 request.open('GET', 'http://malarvizhitamilarasan.imad.hasura-app.io/counter', true);
-reqiest.send(null);
+request.send(null);
     };
