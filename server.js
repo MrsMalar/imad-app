@@ -41,9 +41,7 @@ var articles = {
                       <p>
                         This is the content of my third article.
                      </p>`
-  
-      } 
-
+        } 
  };
 function createTemplate (data){
     var title = data.title;
@@ -101,7 +99,6 @@ app.get('/submit-name/:name', function(req, res) {  // URL : /submit-name?name**
     // JSON : Jave Script Object Notation
     res.send(JSON.stringify(names));
 });
-
 
 app.get('/:articleName', function (req, res) {
     // articleName == article-one
