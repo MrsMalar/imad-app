@@ -42,15 +42,13 @@ submit.onclick = function() {
           }
           var ul=document.getElementById('name_list');
           ul.innerHTML = list;
-          
-             }
-                }
-               // Not yet done
-            };
+          }
+         }
+         // Not yet done
+    };
     // Make the request
     var nameInput = document.getElementById('name');
     var name = nameInput.value;
-
     request.open('GET', 'http://malarvizhitamilarasan.imad.hasura-app.io/submit-name?name=' + name, true);
     request.send(null);
   // Make a request to the server and send the name
