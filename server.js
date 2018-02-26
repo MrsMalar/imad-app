@@ -8,7 +8,7 @@ var config = {
     database: 'malarvizhitamilarasan',
     host: 'db.imad.hasura-app.io',
     port: '5432',
-    password: procee.env.DB_PASSWORD
+    password: process.env.DB_PASSWORD
 };
 var app = express();
 app.use(morgan('combined'));
@@ -103,8 +103,7 @@ app.get('/test-db', function(req,res) {
            res.send(JSON.stringify(result));
        }
     });
-    
-});
+   });
 var counter =0;
 app.get('/counter', function(req, res) {
     counter = counter +1;
