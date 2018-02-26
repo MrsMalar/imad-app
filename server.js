@@ -10,47 +10,10 @@ var config = {
     port: '5432',
     password: process.env.DB_PASSWORD
 };
+
 var app = express();
 app.use(morgan('combined'));
 
-var articles = {
-    'article-one' : {
-      title:   'Article One | Malarvizhi' ,
-      heading: 'Article One' ,
-      date: '   February 23, 2018' ,
-      content: `
-                  <p>
-                     This is the content of my first article. This is the content of my first article.This is the content of my first article.This is the content of my first article.This is the content of my first article.
-                 </p>
-                 
-                  <p>
-                     This is the content of my first article. This is the content of my first article.This is the content of my first article.This is the content of my first article.This is the content of my first article.
-                 </p>
-                 
-                  <p>
-                     This is the content of my first article. This is the content of my first article.This is the content of my first article.This is the content of my first article.This is the content of my first article.
-                 </p>`
-       } ,
-    'article-two' : {
-          title:   'Article Two | Malarvizhi' ,
-          heading: 'Article Two' ,
-          date: '   February 24, 2018' ,
-          content: `
-                      <p>
-                        This is the content of my second article.
-                     </p>`
-  
-      } ,
-    'article-three' : {
-          title:   'Article Three | Malarvizhi' ,
-          heading: 'Article Three' ,
-          date: '   February 25, 2018' ,
-          content: `
-                      <p>
-                        This is the content of my third article.
-                     </p>`
-        } 
- };
 function createTemplate (data){
     var title = data.title;
     var heading = data.heading;
