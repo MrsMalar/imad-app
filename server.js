@@ -108,10 +108,10 @@ app.post('/login', function(req, res) {
                    res.status(403).send('username/password is invalid');
                }
            }
-           res.send('User Successfully created: ' + username);
-       }
+         }
    });
 });
+
 var pool = new Pool(config);
 app.get('/test-db', function(req,res) {
     // Make a select request
