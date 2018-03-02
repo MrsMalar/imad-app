@@ -80,9 +80,9 @@ app.post('/create-user', function(req, res) {
    var dbString = hash(password, salt);
    pool.query('INSERT INTO "user" (username, password) VALUES ($1, $2)', [username, dbString], function(req, res) {
         if(err) {
-           res.status(500).send(err,toString());
+           res.status(500).send(err.toString());
        } else {
-           res.send('User Successfully created : ' + username);
+           res.send('User Successfully created: ' + username);
        }
    });
 });
@@ -93,7 +93,7 @@ app.get('/test-db', function(req,res) {
     // Returns a response with the results
     pool.query('SELECT * FROM test', function(err, result){
        if(err) {
-           res.status(500).send(err,toString());
+           res.status(500).send(err.toString());
        } else {
            res.send(JSON.stringify(result.rows));
        }
