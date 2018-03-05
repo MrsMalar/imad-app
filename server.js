@@ -156,39 +156,63 @@ app.get('/logout', function(req, res) {
     
 var pool = new Pool(config);
 
-app.get('/test-db', function(req,res) {
-    // Make a select request
-    // Returns a response with the results
-    pool.query('SELECT * FROM test', function(err, result){
-       if(err) {
-           res.status(500).send(err.toString());
-       } else {
-           res.send(JSON.stringify(result.rows));
-       }
-    });
+app.get('/get-articles', function (req, res) {
+   // make a select request
+   // return a response with the results
+   pool.query('SELECT * FROM article ORDER BY date DESC', function (err, result) {
+      if (err) {
+          res.status(500).send(err.toString());
+      } else {
+          res.send(JSON.stringify(result.rows));
+      }
    });
-var counter =0;
-app.get('/counter', function(req, res) {
-    counter = counter +1;
-    res.send(counter.toString());
 });
 
-var names =[];
-// /submit-name   
-// req.query.name
-app.get('/submit-name', function(req, res) {  // URL : /submit-name?name***
-    //Get the name from the request
-    var name = req.query.name;
-    
-    names.push(name);
-    // JSON : Jave Script Object Notation
-    res.send(JSON.stringify(names));
+app.get('/get-comments/:articleName', function (req, res) {
+   // make a select request
+   // return a response with the results
+   pool.query('SELECT comment.*, "user".username FROM article, comment, "user" WHERE article.title = $1 AND article.id = comment.article_id AND comment.user_id = "user".id ORDER BY comment.timestamp DESC', [req.params.articleName], function (err, result) {
+      if (err) {
+          res.status(500).send(err.toString());
+      } else {
+          res.send(JSON.stringify(result.rows));
+      }
+   });
+});
+
+app.post('/submit-comment/:articleName', function (req, res) {
+   // Check if the user is logged in
+    if (req.session && req.session.auth && req.session.auth.userId) {
+        // First check if the article exists and get the article-id
+        pool.query('SELECT * from article where title = $1', [req.params.articleName], function (err, result) {
+            if (err) {
+                res.status(500).send(err.toString());
+            } else {
+                if (result.rows.length === 0) {
+                    res.status(400).send('Article not found');
+                } else {
+                    var articleId = result.rows[0].id;
+                    // Now insert the right comment for this article
+                    pool.query(
+                        "INSERT INTO comment (comment, article_id, user_id) VALUES ($1, $2, $3)",
+                        [req.body.comment, articleId, req.session.auth.userId],
+                        function (err, result) {
+                            if (err) {
+                                res.status(500).send(err.toString());
+                            } else {
+                                res.status(200).send('Comment inserted!')
+                            }
+                        });
+                }
+            }
+       });     
+    } else {
+        res.status(403).send('Only logged in users can comment');
+    }
 });
 
 app.get('/articles/:articleName', function (req, res) {
-    // articleName == article-one
-    // articles[articleName] == content object for article one
-   // SELECT * FROM article WHERE title = '/'; DELETE WHERE a = 'asdf'
+       // SELECT * FROM article WHERE title = '/'; DELETE WHERE a = 'asdf'
    pool.query("SELECT * FROM article WHERE title = $1", [req.params.articleName], function(err, result){
      if(err) {
          res.status(500).send(err.toString());
@@ -203,18 +227,9 @@ app.get('/articles/:articleName', function (req, res) {
    });
 });
 
-app.get('/ui/style.css', function (req, res) {
-  res.sendFile(path.join(__dirname, 'ui', 'style.css'));
+app.get('/ui/:fileName', function (req, res) {
+  res.sendFile(path.join(__dirname, 'ui', req.params.fileName));
 });
-
-app.get('/ui/main.js', function (req, res) {
-  res.sendFile(path.join(__dirname, 'ui', 'main.js'));
-});
-
-app.get('/ui/madi.png', function (req, res) {
-  res.sendFile(path.join(__dirname, 'ui', 'madi.png'));
-});
-
 
 // Do not change port, otherwise your app won't run on IMAD servers
 // Use 8080 only for local development if you already have apache running on 80
