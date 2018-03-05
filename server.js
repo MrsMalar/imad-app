@@ -71,13 +71,13 @@ app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'index.html'));
 });
 
-
 function hash(input, salt) {
     // How do we create a hash?
     // pbkdf = Password Paste Key Derivation Function
     var hashed = crypto.pbkdf2Sync(input, salt, 10000, 512, 'sha512');
     return ["pbkdf2", "10000", salt, hashed.toString('hex')].join('$');
 }
+
 
 app.get('/hash/:input', function(req, res) {
    var hashedString = hash(req.params.input, 'this-is-some-random-string');
@@ -86,7 +86,7 @@ app.get('/hash/:input', function(req, res) {
 
 app.post('/create-user', function(req, res) {
    // Username, Password
-   // {"username": "malar", "password" : "password"}
+   // {"username": "malar", "password" : "pwd"}
    // JSON
    var username = req.body.username;
    var password = req.body.password;
@@ -134,19 +134,28 @@ app.post('/login', function(req, res) {
 });
 
 app.get('/check-login', function(req, res) { 
-   if(req.session && req.session.auth && req.session.auth.userId) { 
-       res.send('You are logged in : ' + req.session.auth.userId);
+   if(req.session && req.session.auth && req.session.auth.userId) {
+       // Load the user object
+       pool.query('SELECT * FROM "user" WHERE id = $1', [req.session.auth.userId], function (err, result) {
+           if (err) {
+              res.status(500).send(err.toString());
+           } else {
+              res.send(result.rows[0].username);    
+           }
+       });
    } else {
-       res.send('You are not logged in');
+       res.status(400).send('You are not logged in');
    }
 });
 
+
 app.get('/logout', function(req, res) {
     delete req.session.auth;
-    res.send('logged out');
-});
-var
-pool = new Pool(config);
+     res.send('<html><body>Logged out!<br/><br/><a href="/">Back to home</a></body></html>');
+    });
+    
+var pool = new Pool(config);
+
 app.get('/test-db', function(req,res) {
     // Make a select request
     // Returns a response with the results
