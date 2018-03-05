@@ -52,7 +52,15 @@ function createTemplate (data){
              <div>
                 ${content}
              </div>
+             <hr/>
+             <h4>Comments</h4>
+             <div id="comment_form">
+             </div>
+             <div id="comments">
+                <center>Loading comments...</center>
+             </div>
          </div>
+         <script type="text/javascript" src="/ui/article.js"></script> 
      </body>
     </html>
     `;
@@ -62,6 +70,7 @@ function createTemplate (data){
 app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'ui', 'index.html'));
 });
+
 
 function hash(input, salt) {
     // How do we create a hash?
