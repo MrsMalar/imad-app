@@ -1,4 +1,4 @@
-// Eg: coco98.imad.hasura-app.io/articles/article-one will result in article-one
+// Eg: malarvizhitamilarasan.imad.hasura-app.io/articles/article-one will result in article-one
 var currentArticleTitle = window.location.pathname.split('/')[2];
 
 function loadCommentForm () {
@@ -25,12 +25,11 @@ function loadCommentForm () {
                 if (request.status === 200) {
                     // clear the form & reload all the comments
                    
-                   // document.getElementById('comment_text').value = '';
-                    //loadComments();    
+                    document.getElementById('comment_text').value = '';
+                    loadComments();    
                 } else {
                     alert('Error!!! Could not submit comment');
-                    document.getElementById('comment_text').value = '';
-                    loadComments();  
+                   
                 }
                 submit.value = 'Submit';
           }
